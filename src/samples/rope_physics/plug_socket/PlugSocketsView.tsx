@@ -1,5 +1,6 @@
 import React, { useRef, useState } from 'react';
 import {
+  Dimensions,
   LayoutChangeEvent,
   StatusBar,
   StyleSheet,
@@ -9,14 +10,14 @@ import {
   View,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { SFSymbol } from 'react-native-sfsymbols';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { RopeViewSkia, RopeViewSvg } from '.';
+import { RopeViewSkia } from '.';
 import { BackButton } from '../../../components';
 import { INPUT_UNITS, OUTPUT_UNITS, UNIT_SIZE } from './model';
 import { ActiveUnitInfo, UnitDataInfo, UnitInfoType } from './types';
-import Config from '../../../Config';
+
 import * as theme from '../../../theme';
+
+const screenWidth = Dimensions.get('window').width;
 
 interface UnitViewProps {
   unit: UnitDataInfo;
@@ -53,73 +54,12 @@ const UnitView: React.FC<UnitViewProps> = ({
           backgroundColor: activeUnit.color.fill,
           borderColor: activeUnit.color.stroke,
           marginBottom: index < INPUT_UNITS.length - 1 ? 12 : 0,
+          width: (screenWidth - 16 * 4) / 4,
         },
       ]}
       onLayout={onLayout}
       ref={getRef}
-    >
-      <View>
-        {/* SF Icons for iOS and Material Icons for Android */}
-        {Config.isIos ? (
-          <>
-            <SFSymbol
-              //   name="poweroutlet.type.f.fill" // iOS 16+
-              name="house.circle.fill"
-              weight="semibold"
-              scale="large"
-              color={activeUnit.color.icon}
-              size={30}
-              resizeMode="center"
-              multicolor={false}
-            />
-            <SFSymbol
-              // name="poweroutlet.type.f" // iOS 16+
-              name="house.circle"
-              weight="semibold"
-              scale="large"
-              color={activeUnit.color.iconFill}
-              size={30}
-              resizeMode="center"
-              multicolor={false}
-              style={{ ...StyleSheet.absoluteFillObject }}
-            />
-          </>
-        ) : (
-          <View style={{ alignSelf: 'center' }}>
-            <Icon
-              name="checkbox-blank-circle"
-              color={activeUnit.color.icon}
-              size={48}
-            />
-            <Icon
-              style={{ ...StyleSheet.absoluteFillObject }}
-              name="home-circle-outline"
-              color={activeUnit.color.iconFill}
-              size={48}
-            />
-          </View>
-        )}
-      </View>
-      {Config.isIos ? (
-        <SFSymbol
-          name={isActive && unit.activeIcon ? unit.activeIcon : unit.icon}
-          weight="semibold"
-          scale="large"
-          color="white"
-          size={12}
-          resizeMode="center"
-          multicolor={false}
-          style={[styles.unitSmallIcon, { padding: 12 }]}
-        />
-      ) : (
-        <Icon
-          style={styles.unitSmallIcon}
-          name={isActive && unit.activeIcon ? unit.activeIcon : unit.icon}
-          color="white"
-          size={20}
-        />
-      )}
-    </View>
+    />
   );
 };
 
@@ -162,8 +102,8 @@ const PlugSocketsView = () => {
       />
 
       {/* Input and Output units */}
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-        <View>
+      <View style={{ justifyContent: 'space-between', gap: 100 }}>
+        <View style={themeStyles(isDarkMode).compartimentContainer}>
           {INPUT_UNITS.map((unit, index) => (
             <UnitView
               key={`${unit.icon}_${index}`}
@@ -188,7 +128,7 @@ const PlugSocketsView = () => {
             />
           ))}
         </View>
-        <View>
+        <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
           {OUTPUT_UNITS.map((unit, index) => (
             <UnitView
               key={`${unit.icon}_${index}`}
@@ -215,24 +155,17 @@ const PlugSocketsView = () => {
         </View>
       </View>
 
-      {/* Rope View */}
+      {/* Linha */}
       <View style={{ ...StyleSheet.absoluteFillObject }}>
-        {unitsInfo.inputUnits?.[0] &&
-          unitsInfo.outputUnits?.[0] &&
-          (solutionSvg ? (
-            <RopeViewSvg
-              {...{ unitsInfo, activeUnit }}
-              onPlugged={setActiveUnit}
-            />
-          ) : (
-            <RopeViewSkia
-              {...{ unitsInfo, activeUnit }}
-              onPlugged={setActiveUnit}
-            />
-          ))}
+        {unitsInfo.inputUnits?.[0] && unitsInfo.outputUnits?.[0] && (
+          <RopeViewSkia
+            {...{ unitsInfo, activeUnit }}
+            onPlugged={setActiveUnit}
+          />
+        )}
       </View>
 
-      {/* Header */}
+      {/* Header Switch */}
       <View style={[styles.headerContainer, { top: inset.top + 8 }]}>
         <BackButton style={{ marginTop: 0 }} />
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -246,7 +179,7 @@ const PlugSocketsView = () => {
           </Text>
           <Switch
             style={{ marginHorizontal: 8 }}
-            trackColor={{ false: '#6EA7F9', true: '#6EA7F9' }}
+            trackColor={{ false: '#6EA7F9', true: '#pink' }}
             thumbColor="#2767FD"
             ios_backgroundColor="#6EA7F9"
             onValueChange={() => SwitchSolution(!solutionSvg)}
@@ -277,9 +210,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   unitContainer: {
-    width: UNIT_SIZE,
-    height: UNIT_SIZE,
-    borderRadius: 16,
+    height: 115,
+    width: '100%',
     borderWidth: 1,
     justifyContent: 'center',
   },
@@ -306,6 +238,14 @@ const themeStyles = (isDarkMode: boolean) =>
       fontSize: 16,
       fontWeight: '500',
       color: theme.rope(isDarkMode).blackWhite,
+    },
+    compartimentContainer: {
+      flexDirection: 'row',
+      justifyContent: 'center',
+      alignItems: 'center',
+      flexWrap: 'wrap',
+      width: '100%',
+      borderWidth: 1,
     },
   });
 

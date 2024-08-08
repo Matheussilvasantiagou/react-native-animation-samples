@@ -38,11 +38,11 @@ export const INPUT_UNITS: UnitDataInfo[] = [
   { icon: Config.isIos ? 'drop.fill' : 'water', color: COLOR_UNITS[0] },
   {
     icon: Config.isIos ? 'flame.fill' : 'fire',
-    color: COLOR_UNITS[1],
+    color: COLOR_UNITS[0],
   },
   {
     icon: Config.isIos ? 'bolt.fill' : 'lightning-bolt',
-    color: COLOR_UNITS[2],
+    color: COLOR_UNITS[0],
   },
 ];
 
@@ -56,6 +56,11 @@ export const OUTPUT_UNITS: UnitDataInfo[] = [
     icon: Config.isIos ? 'flashlight.off.fill' : 'flashlight-off', // spigot.fill, iOS 16+
     color: UNPLUG_COLORS,
     activeIcon: Config.isIos ? 'flashlight.on.fill' : 'flashlight',
+  },
+  {
+    icon: Config.isIos ? 'printer' : 'printer-outline', // stove.fill, iOS 16+
+    color: UNPLUG_COLORS,
+    activeIcon: Config.isIos ? 'printer.fill' : 'printer',
   },
   {
     icon: Config.isIos ? 'printer' : 'printer-outline', // stove.fill, iOS 16+

@@ -11,7 +11,7 @@ import GridMagSamples, {
   GridMagnificationInitial,
   GridMagnificationSkia,
 } from './samples/grid_magnification';
-import { RopePhysics, RopeViewSkia, RopeViewSvg } from './samples/rope_physics';
+import { RopePhysics, RopeViewSkia } from './samples/rope_physics';
 import { PlugSocketsView } from './samples/rope_physics/plug_socket';
 import CustomCaret from './samples/custom_caret/CustomCaret';
 
@@ -53,7 +53,6 @@ const AppNavigator = () => {
         <Stack.Group>
           <Stack.Screen name="rope_physics" component={RopePhysics} />
           <Stack.Screen name="rope-skia" component={RopeViewSkia} />
-          <Stack.Screen name="rope-svg" component={RopeViewSvg} />
           <Stack.Screen name="rope-sockets-demo" component={PlugSocketsView} />
         </Stack.Group>
         <Stack.Screen name="custom_caret" component={CustomCaret} />

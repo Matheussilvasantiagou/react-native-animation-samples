@@ -58,6 +58,7 @@ const GestureHandler: React.FC<GestureHandlerProps> = ({
   const panGesture = Gesture.Pan()
     .onStart(() => {
       runOnJS(onGesture)(true, activeUnit.value);
+      console.log('onStart');
     })
     .onChange(e => {
       point.value = { x: e.absoluteX, y: e.absoluteY };
@@ -81,7 +82,7 @@ const GestureHandler: React.FC<GestureHandlerProps> = ({
             x: unit.startX + UNIT_SIZE / 2,
             y: unit.startY + UNIT_SIZE / 2,
           };
-          // activeUnit.value = i;
+          activeUnit.value = i;
           runOnJS(onGesture)(false, i);
           return;
         }
@@ -151,7 +152,7 @@ const Plug: React.FC<PlugProp> = ({ point, activeUnit }) => {
         {...circleProps}
         color={plugStrokeColor}
         style="stroke"
-        strokeWidth={4}
+        strokeWidth={1}
       />
     </Group>
   );
@@ -173,9 +174,9 @@ const createPath = (
   path.moveTo(point1.x, point1.y);
   path.quadTo(slackPoint.x, slackPoint.y, point2.x, point2.y);
   if (type === 'stroke') {
-    path.dash(8, 10, dashPhase);
+    path.dash(10, 20, dashPhase);
   }
-  const width = type === 'fill' ? 6 : 2;
+  const width = type === 'fill' ? 10 : 2;
   path.stroke({ width, join: StrokeJoin.Round, cap: StrokeCap.Round });
   path.close();
 
